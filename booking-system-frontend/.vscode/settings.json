@@ -1,0 +1,8 @@
+{
+  "cSpell.words": ["ampm", "shadcn", "sonner"],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit"
+  }
+}

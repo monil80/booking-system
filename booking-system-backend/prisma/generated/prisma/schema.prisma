@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bookings {
+  id             Int                @id @default(autoincrement())
+  user_id        Int
+  customer_name  String             @db.VarChar(100)
+  customer_email String             @db.VarChar(150)
+  booking_date   DateTime           @db.Date
+  booking_type   booking_type_enum
+  booking_slot   booking_slot_enum?
+  from_time      DateTime?          @db.Time(6)
+  to_time        DateTime?          @db.Time(6)
+  created_at     DateTime?          @default(now()) @db.Timestamp(6)
+  users          users              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id            Int        @id @default(autoincrement())
+  first_name    String?    @db.VarChar(100)
+  last_name     String?    @db.VarChar(100)
+  email         String     @unique @db.VarChar(150)
+  password_hash String
+  is_verified   Boolean?   @default(false)
+  created_at    DateTime?  @default(now()) @db.Timestamp(6)
+  token         String?    @db.VarChar(100)
+  bookings      bookings[]
+}
+
+enum booking_slot_enum {
+  first_half
+  second_half
+}
+
+enum booking_type_enum {
+  full_day
+  half_day
+  custom
+}
